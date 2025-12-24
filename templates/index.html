@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Music Search</title>
+</head>
+<body>
+
+<h2>Müzik Ara</h2>
+<form method="POST">
+    <input type="text" name="query" value="{{ query }}" required>
+    <button type="submit">Ara</button>
+</form>
+
+<h3>Arama Sonuçları</h3>
+{% for song in songs %}
+    <div>
+        <img src="{{ song.image }}" width="100">
+        <p>{{ song.title }} - {{ song.artist }}</p>
+        <audio controls src="{{ song.preview }}"></audio>
+        <form method="POST" action="/save">
+            {% for key, value in song.items() %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <button type="submit">Kaydet</button>
+        </form>
+    </div>
+    <hr>
+{% endfor %}
+
+<h3>Kaydedilen Şarkılar (Stateful)</h3>
+{% for song in saved_songs %}
+    <div>
+        <img src="{{ song.image }}" width="100">
+        <p>{{ song.title }} - {{ song.artist }}</p>
+        <audio controls src="{{ song.preview }}"></audio>
+    </div>
+    <hr>
+{% endfor %}
+
+</body>
+</html>
