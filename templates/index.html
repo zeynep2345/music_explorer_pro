@@ -1,42 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <meta charset="utf-8">
-    <title>Music Search</title>
+    <meta charset="UTF-8">
+    <title>Music App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h2>Müzik Ara</h2>
-<form method="POST">
-    <input type="text" name="query" value="{{ query }}" required>
-    <button type="submit">Ara</button>
-</form>
+<div class="container">
+    <h1>🎵 Music Search App</h1>
 
-<h3>Arama Sonuçları</h3>
-{% for song in songs %}
-    <div>
-        <img src="{{ song.image }}" width="100">
-        <p>{{ song.title }} - {{ song.artist }}</p>
-        <audio controls src="{{ song.preview }}"></audio>
-        <form method="POST" action="/save">
-            {% for key, value in song.items() %}
-                <input type="hidden" name="{{ key }}" value="{{ value }}">
+    <form method="POST" class="search-box">
+        <input type="text" name="query" value="{{ query }}" placeholder="Şarkı veya sanatçı ara..." required>
+        <button type="submit">Ara</button>
+    </form>
+
+    <div class="section">
+        <h2>Arama Sonuçları</h2>
+        <div class="grid">
+            {% for song in songs %}
+            <div class="card">
+                <img src="{{ song.image }}">
+                <p><strong>{{ song.title }}</strong></p>
+                <p>{{ song.artist }}</p>
+                <audio controls src="{{ song.preview }}"></audio>
+                <form method="POST" action="/save">
+                    {% for key, value in song.items() %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                    {% endfor %}
+                    <button class="save-btn">Kaydet</button>
+                </form>
+            </div>
             {% endfor %}
-            <button type="submit">Kaydet</button>
-        </form>
+        </div>
     </div>
-    <hr>
-{% endfor %}
 
-<h3>Kaydedilen Şarkılar (Stateful)</h3>
-{% for song in saved_songs %}
-    <div>
-        <img src="{{ song.image }}" width="100">
-        <p>{{ song.title }} - {{ song.artist }}</p>
-        <audio controls src="{{ song.preview }}"></audio>
+    <div class="section">
+        <h2>⭐ Kaydedilen Şarkılar</h2>
+        <div class="grid">
+            {% for song in saved_songs %}
+            <div class="card">
+                <img src="{{ song.image }}">
+                <p><strong>{{ song.title }}</strong></p>
+                <p>{{ song.artist }}</p>
+                <audio controls src="{{ song.preview }}"></audio>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    <hr>
-{% endfor %}
+</div>
 
 </body>
 </html>
